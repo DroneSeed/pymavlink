@@ -1267,8 +1267,9 @@ class mavtcpin(mavfile):
         except socket.error as e:
             if e.errno in [ errno.EAGAIN, errno.EWOULDBLOCK ]:
                 return ""
-            self.port.close()
-            self.port = None
+            if self.port is not None:
+                self.port.close()
+                self.port = None
             self.fd = self.listen.fileno()
             return ''
         return data
